@@ -1,22 +1,27 @@
-/**************************
+/**********************************
 
-Given a string s, partition s such that every substring of the partition is a palindrome.
+Given a string s, partition s such that every substring
+of the partition is a palindrome.
 
-Return the minimum cuts needed for a palindrome partitioning of s.
+Return all possible palindrome partitioning of s.
 
 For example, given s = "aab",
-Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
+Return
 
-**************************/
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
 
-#include <cstring>
+***********************************/
+
 #include <string>
+#include <vector>
 using namespace std;
 
 class Solution {
 public:
-
-    int minCut(string s) {
+    vector<vector<string> > partition(string s) {
         int n = s.size();
         bool **is = new bool*[n];
         for(int i = 0; i < n; i++){
@@ -40,21 +45,24 @@ public:
             }
         }
 
-        int *p = new int[n];
-        memset(p, 0, sizeof(p));
-        for(int i = 1; i < n; i++){
+        vector<vector<string> > *res = new vector<vector<string> >[n];
+
+        for(int i = 0; i < n; i++){
             if(is[0][i]){
-                p[i] = 0;
-                continue;
+                vector<string> a;
+                a.push_back(s.substr(0, i+1));
+                res[i].push_back(a);
             }
-            int min = p[i-1] + 1;
             for(int j = 0; j < i; j++){
-                if(is[j+1][i] && p[j]+1 < min){
-                    min = p[j] + 1;
+                if(is[j+1][i]){
+                    for(auto it = res[j].begin(); it != res[j].end(); it++){
+                        vector<string> a = *it;
+                        a.push_back(s.substr(j+1, i-j));
+                        res[i].push_back(a);
+                    }
                 }
             }
-            p[i] = min;
         }
-        return p[n-1];
+        return res[n-1];
     }
 };
