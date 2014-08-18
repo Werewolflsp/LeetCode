@@ -14,6 +14,7 @@ Could you implement it without using extra memory?
 // Will redo this when I'm in the mood
 
 #include <unordered_map>
+#include <climits>
 using namespace std;
 
 class Solution {
@@ -28,6 +29,7 @@ public:
                 return it->first;
             }
         }
+        return 0;
     }
 };
 
